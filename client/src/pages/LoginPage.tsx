@@ -83,9 +83,15 @@ function LoginPage() {
             </span>
           </div>
 
-          <button className="w-full px-5 py-2.5 bg-movie-accent text-movie-text-main rounded mt-4 cursor-pointer hover:bg-[#1b97b2] transition-colors" type="submit">
-            Login
-          </button>
+          <div className="flex justify-between items-center mt-6">
+            <button className="px-6 py-2.5 bg-movie-accent text-movie-text-main rounded cursor-pointer hover:bg-[#1b97b2] transition-colors font-bold" type="submit">
+              Login
+            </button>
+
+            <button className="px-4 py-2 text-sm border border-gray-600 text-movie-text-main rounded hover:bg-movie-bg transition-colors cursor-pointer font-medium" onClick={() => navigate("/")} type="button">
+              Back to Home
+            </button>
+          </div>
 
         </form>
 

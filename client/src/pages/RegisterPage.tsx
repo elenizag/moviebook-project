@@ -99,10 +99,22 @@ function RegisterPage() {
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
+          <div className="flex justify-between items-center mt-6">
+            <button 
+              className="px-6 py-2.5 bg-movie-accent text-movie-text-main rounded cursor-pointer hover:bg-[#1b97b2] transition-colors font-bold" 
+              type="submit"
+            >
+              Create Account
+            </button>
 
-          <button className="w-full px-5 py-2.5 bg-movie-accent text-movie-text-main rounded mt-4 cursor-pointer hover:bg-[#1b97b2] transition-colors" type="submit">
-            Create Account
-          </button>
+            <button 
+              type="button"
+              onClick={() => navigate("/")} 
+              className="px-4 py-2 text-sm border border-gray-600 text-movie-text-main rounded hover:bg-movie-bg transition-colors cursor-pointer font-medium"
+            >
+              Back to Home
+            </button>
+          </div>
 
         </form>
 

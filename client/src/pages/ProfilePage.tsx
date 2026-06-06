@@ -1,10 +1,13 @@
+import { FaUserCircle } from "react-icons/fa";
 import { getProfile } from "../services/userService";
 import { useEffect, useState } from "react";
 
 interface UserProfile {
+  username: string;
   firstName: string;
   lastName: string;
   email: string;
+  city: string;
   profileImage?: string; 
 }
 
@@ -16,8 +19,20 @@ function ProfilePage() {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const data = await getProfile();
-        setUser(data);
+        //const data = await getProfile();
+        //setUser(data);
+
+        // demo code
+        const savedUserString = localStorage.getItem("user");
+        if (savedUserString) {
+          const savedUser = JSON.parse(savedUserString);
+          setUser(savedUser);
+        } else {
+          setError("User not found. Please login.");
+        }
+
+        
+
       } catch (err: any) {
         setError(err.message || "Failed to load profile");
       } finally {
@@ -37,8 +52,8 @@ function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-[450px] bg-movie-surface rounded-lg border border-[#b4b4b4] p-[30px] flex flex-col items-center">
+    <div className="min-h-[80vh] flex flex-col justify-center items-center p-4">
+      <div className="w-full max-w-[360px] bg-movie-surface rounded-lg border border-[#b4b4b4] p-[30px] flex flex-col items-center">
         <h2 className="text-2xl font-bold font-display mb-6 text-movie-text-main">Your Profile</h2>
 
         {user?.profileImage ? (
@@ -48,24 +63,39 @@ function ProfilePage() {
             className="w-32 h-32 rounded-full object-cover border-2 border-movie-accent mb-6"
           />
         ) : (
-          <div className="w-32 h-32 rounded-full bg-movie-bg border-2 border-movie-accent mb-6 flex items-center justify-center text-movie-text-sec text-sm">
-            No Image
+          <div className="w-22 h-22 rounded-full bg-movie-bg border border-gray-700 mb-6 flex items-center justify-center text-movie-accent">
+            <FaUserCircle className="w-full h-full text-movie-text-sec" />
           </div>
         )}
 
-        <div className="w-full text-left space-y-3 mb-6 bg-movie-bg/30 p-4 rounded border border-gray-700/50">
-          <p className="text-sm text-movie-text-main m-0">
-            <strong className="text-movie-text-sec font-medium">First Name:</strong> {user?.firstName}
+        <div className="w-full text-left space-y-3 mb-6 bg-movie-bg/30 p-4 rounded border border-gray-700/50">    
+          <p className="text-sm text-movie-text-main m-1 flex items-center">
+            <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">First Name:</strong> 
+            <span className="text-movie-text-main">{user?.firstName}</span>
           </p>
-          <p className="text-sm text-movie-text-main m-0">
-            <strong className="text-movie-text-sec font-medium">Last Name:</strong> {user?.lastName}
+          
+          <p className="text-sm text-movie-text-main m-1 flex items-center">
+            <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">Last Name:</strong> 
+            <span className="text-movie-text-main">{user?.lastName}</span>
           </p>
-          <p className="text-sm text-movie-text-main m-0">
-            <strong className="text-movie-text-sec font-medium">Email:</strong> {user?.email}
+          
+          <p className="text-sm text-movie-text-main m-1 flex items-center">
+            <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">Username:</strong> 
+            <span className="text-movie-text-main">{user?.username}</span>
+          </p>
+
+          <p className="text-sm text-movie-text-main m-1 flex items-center">
+            <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">Email:</strong> 
+            <span className="text-movie-text-main truncate">{user?.email}</span>
+          </p>
+          
+          <p className="text-sm text-movie-text-main m-1 flex items-center">
+            <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">City:</strong> 
+            <span className="text-movie-text-main">{user?.city}</span>
           </p>
         </div>
 
-        <button className="w-full px-5 py-2.5 bg-movie-accent text-movie-text-main rounded font-medium cursor-pointer hover:bg-[#1b97b2] transition-colors">
+        <button className="px-4 py-2 bg-movie-accent text-movie-text-main rounded font-medium cursor-pointer hover:bg-[#1b97b2] transition-colors">
           Edit Profile
         </button>
       </div>    
