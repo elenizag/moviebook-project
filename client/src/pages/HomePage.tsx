@@ -8,7 +8,6 @@ import {
 import HeroBanner from "../components/HeroBanner";
 import MovieSection from "../components/MovieSection";
 
-
 function HomePage() {
   const navigate = useNavigate();
 
@@ -56,19 +55,19 @@ function HomePage() {
 
       <main className="w-full px-16 py-14">
         <div className="flex justify-center mb-10">
-        <input
-          type="text"
-          placeholder="Search movies..."
-          className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none"
-        />
+          <input
+            type="text"
+            placeholder="Search movies..."
+            className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none"
+          />
         </div>
-       <HeroBanner />
+        <HeroBanner />
 
-   <MovieSection title="Keep Watching" movies={keepWatchingMovies} />
+        <MovieSection title="Keep Watching" movies={keepWatchingMovies} />
 
-<MovieSection title="Trending Movies" movies={trendingMovies} />
+        <MovieSection title="Trending Movies" movies={trendingMovies} />
 
-<MovieSection title="Top Rated" movies={topRatedMovies} />
+        <MovieSection title="Top Rated" movies={topRatedMovies} />
       </main>
     </div>
   );

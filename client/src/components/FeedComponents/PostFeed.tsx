@@ -14,12 +14,11 @@ export default function PostFeed({ onReviewSubmit }: PostFeedProps) {
 
   return (
     <div className="bg-movie-surface/40 p-4 rounded-xl border border-movie-border/60 max-w-2xl w-full mt-5">
-      <div className="flex gap-3 items-center w-full">
-        {/* User Avatar */}
+      <div className="flex gap-3 items-center w-ful">
         <img
           src={ProfPic}
           alt="Profile picture of the user"
-          className="w-9 h-9 border border-movie-accent/40 rounded-full object-cover shrink-0"
+          className="w-9 h-9 border border-movie-accent/40 rounded-full object-cover shrink-0 active:border-movie-accent cursor-pointer"
         />
         <div
           onClick={() => setIsModalOpen(true)}

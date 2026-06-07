@@ -12,13 +12,13 @@ export default function SideFeed() {
         </h1>
 
         <div className="flex items-center justify-between w-full bg-movie-surface/40 p-3 rounded-lg border border-movie-border/40 hover:border-movie-accent/30 transition-colors duration-200">
-          <div className="flex items-center gap-3 min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
             <img
               src={ProfPic}
               alt="Profile pic"
               className="w-10 h-10 border border-movie-accent/40 rounded-full object-cover shrink-0 cursor-pointer active:border-movie-accent/60"
             />
-            <h2 className="text-sm font-semibold text-movie-text-sec truncate hover:text-white cursor-pointer">
+            <h2 className="text-sm font-semibold text-movie-text-sec truncate hover:text-white cursor-pointer px-2">
               Not Batman
             </h2>
           </div>
@@ -34,7 +34,7 @@ export default function SideFeed() {
               alt="Profile pic"
               className="w-10 h-10 border border-movie-accent/40 rounded-full object-cover shrink-0 cursor-pointer active:border-movie-accent/60"
             />
-            <h2 className="text-sm font-semibold text-movie-text-sec truncate hover:text-white cursor-pointer">
+            <h2 className="text-sm font-semibold text-movie-text-sec truncate hover:text-white cursor-pointer px-2">
               Def Not Batman
             </h2>
           </div>
