@@ -11,7 +11,16 @@ const validate = (schema: ZodType<any, any, any>) => {
     })
 
     if (!result.success) {
-      return next(new BadRequestError(result.error.issues[0]?.message || 'Validation failed'))
+      const fieldErrors: Record<string, string> = {}
+      
+      result.error.issues.forEach(issue => {
+        const field = issue.path[issue.path.length - 1]?.toString()
+        if (field && !fieldErrors[field]) {
+          fieldErrors[field] = issue.message
+        }
+      })
+      
+      return next(new BadRequestError(fieldErrors, true))
     }
 
     req.body = result.data.body

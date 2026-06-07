@@ -11,8 +11,16 @@ export class HttpError extends Error {
 }
 
 export class BadRequestError extends HttpError {
-  constructor(message: string = 'Bad Request') {
-    super(400, message)
+  public errors?: Record<string, string>
+  public skipErrorMessage?: boolean
+
+  constructor(message: string | Record<string, string> = 'Bad Request', skipErrorMessage = false) {
+    const messageStr = typeof message === 'string' ? message : 'Validation failed'
+    super(400, messageStr)
+    if (typeof message === 'object' && !Array.isArray(message)) {
+      this.errors = message
+    }
+    this.skipErrorMessage = skipErrorMessage
   }
 }
 
