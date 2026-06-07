@@ -38,15 +38,6 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-movie-bg text-movie-text-main font-body">
       <main className="w-full px-16 py-14">
-        
-        {/* Search Bar */}
-        <div className="flex justify-center mb-10">
-          <input
-            type="text"
-            placeholder="Search movies..."
-            className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none focus:ring-2 focus:ring-movie-accent/50 transition-all"
-          />
-        </div>
 
         <div className="bg-movie-surface rounded-xl border border-gray-800 p-8 shadow-md text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold font-display mb-2">

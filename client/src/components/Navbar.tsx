@@ -55,6 +55,15 @@ function Navbar() {
         {/* αν είναι συνδεδεμένος */}
         {isLoggedIn && (
           <>
+            {/* Search Bar */}
+            <div className=" px-4 flex justify-center ">
+              <input
+                type="text"
+                placeholder="Search movies..."
+                className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none focus:ring-2 focus:ring-movie-accent/50 transition-all"
+              />
+            </div>
+            
             <button 
                 onClick={() => { setIsDropdownOpen(false); navigate("/home"); }} className="text-sm font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-4">
               Home
