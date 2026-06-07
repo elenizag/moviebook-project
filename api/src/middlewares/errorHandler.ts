@@ -1,5 +1,5 @@
-import type { Request, Response, NextFunction } from 'express'
-import { HttpError, BadRequestError } from '../utils/errors'
+import { type Request, type Response, type NextFunction } from 'express'
+import { HttpError, ValidationError } from '../utils/errors'
 
 const errorHandler = (
   error: any,
@@ -7,25 +7,64 @@ const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  if (error instanceof HttpError) {
-    const response: any = {}
-    
-    if (error instanceof BadRequestError && error.skipErrorMessage) {
-      response.errors = error.errors
-    } else {
-      response.error = error.message
-      
-      if (error instanceof BadRequestError && error.errors) {
-        response.errors = error.errors
-      }
-    }
-    
-    return res.status(error.statusCode).json(response)
+  // Check if it's a ValidationError
+  if (error instanceof ValidationError) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      statusCode: error.statusCode,
+      errors: error.errors,
+    })
   }
 
-  console.error(error)
+  // Check if it's a custom HttpError
+  if (error instanceof HttpError) {
+    return res.status(error.statusCode).json({
+      message: error.message,
+      statusCode: error.statusCode,
+    })
+  }
+
+  // Handle JWT errors
+  if (error.name === 'JsonWebTokenError') {
+    return res.status(401).json({
+      message: 'Invalid token',
+      statusCode: 401,
+    })
+  }
+
+  if (error.name === 'TokenExpiredError') {
+    return res.status(401).json({
+      message: 'Token expired',
+      statusCode: 401,
+    })
+  }
+
+  // Handle MongoDB validation errors
+  if (error.name === 'ValidationError') {
+    const messages = Object.values(error.errors)
+      .map((err: any) => err.message)
+      .join(', ')
+
+    return res.status(400).json({
+      message: messages || 'Validation error',
+      statusCode: 400,
+    })
+  }
+
+  // Handle MongoDB duplicate key errors
+  if (error.code === 11000) {
+    const field = Object.keys(error.keyPattern)[0]
+
+    return res.status(409).json({
+      message: `${field} already exists`,
+      statusCode: 409,
+    })
+  }
+
+  // Default error response
   res.status(500).json({
-    error: 'Internal Server Error'
+    message: error.message || 'Internal server error',
+    statusCode: 500,
   })
 }
 

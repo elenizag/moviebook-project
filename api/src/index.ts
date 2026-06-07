@@ -9,6 +9,11 @@ import {
 } from './routes'
 import { errorHandler } from './middlewares'
 import useDatabase from './lib/database'
+import dns from 'dns'
+
+if (process.env.NODE_ENV !== 'production') {
+  dns.setServers(['1.1.1.1', '8.8.8.8'])
+}
 
 const app = express()
 const database = await useDatabase()

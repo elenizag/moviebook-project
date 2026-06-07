@@ -11,16 +11,8 @@ export class HttpError extends Error {
 }
 
 export class BadRequestError extends HttpError {
-  public errors?: Record<string, string>
-  public skipErrorMessage?: boolean
-
-  constructor(message: string | Record<string, string> = 'Bad Request', skipErrorMessage = false) {
-    const messageStr = typeof message === 'string' ? message : 'Validation failed'
-    super(400, messageStr)
-    if (typeof message === 'object' && !Array.isArray(message)) {
-      this.errors = message
-    }
-    this.skipErrorMessage = skipErrorMessage
+  constructor(message: string = 'Bad Request') {
+    super(400, message)
   }
 }
 
@@ -45,5 +37,14 @@ export class NotFoundError extends HttpError {
 export class InternalServerError extends HttpError {
   constructor(message: string = 'Internal Server Error') {
     super(500, message)
+  }
+}
+
+export class ValidationError extends HttpError {
+  public errors: Record<string, string>
+
+  constructor(errors: Record<string, string>) {
+    super(400, 'Validation Error')
+    this.errors = errors
   }
 }

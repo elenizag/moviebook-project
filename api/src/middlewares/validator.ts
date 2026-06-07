@@ -1,31 +1,36 @@
 import type { NextFunction, Request, Response } from 'express'
 import type { ZodType } from 'zod'
-import { BadRequestError } from '../utils/errors'
+import { ValidationError } from '../utils/errors'
 
 const validate = (schema: ZodType<any, any, any>) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const parseData: Record<string, any> = {
-      body: req.body
+    try {
+      const parseData: Record<string, any> = {
+        body: req.body
+      }
+
+      const result = schema.safeParse(parseData)
+
+      if (!result.success) {
+        const errors: Record<string, string> = {}
+
+        result.error.issues.forEach((error) => {
+          const field = error.path[error.path.length - 1]?.toString() || 'unknown'
+          
+          if (!errors[field]) {
+            errors[field] = error.message
+          }
+        })
+
+        return next(new ValidationError(errors))
+      }
+
+      req.body = result.data.body
+
+      next()
+    } catch (error) {
+      next(error)
     }
-
-    const result = schema.safeParse(parseData)
-
-    if (!result.success) {
-      const fieldErrors: Record<string, string> = {}
-      
-      result.error.issues.forEach(issue => {
-        const field = issue.path[issue.path.length - 1]?.toString()
-        if (field && !fieldErrors[field]) {
-          fieldErrors[field] = issue.message
-        }
-      })
-      
-      return next(new BadRequestError(fieldErrors, true))
-    }
-
-    req.body = result.data.body
-
-    next()
   }
 }
 
