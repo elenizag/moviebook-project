@@ -18,7 +18,7 @@ if (process.env.NODE_ENV !== 'production') {
 const app = express()
 const database = await useDatabase()
 
-database.connect().catch((error) => {
+await database.connect().catch((error) => {
   console.error('MongoDB connection error:', error)
 })
 
