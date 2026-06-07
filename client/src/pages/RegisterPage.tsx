@@ -1,18 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { registerUser } from "../services/authService";
+import { register } from "../services/authService";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import FormInput from "../components/FormInput";
 
 function RegisterPage() {
   const [formData, setFormData] = useState({
+      name: "",
       username: "",
-      firstName: "",
-      lastName: "",
-      city: "",
       email: "",
       password: "",
+      password_confirmation: "",
     });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -21,23 +20,20 @@ function RegisterPage() {
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.email || !formData.password || !formData.username || !formData.firstName || !formData.lastName || !formData.city) {
+    if (!formData.name || !formData.email || !formData.password || !formData.username || !formData.password_confirmation) {
         alert("Please fill all the fields");
         return;
     }
 
     try {
-      //  const data = await registerUser(formData);
-      //  console.log(data);
+      await register(formData);
+      alert("Registration successful");
 
-      // demo code
-        localStorage.setItem("mockUser", JSON.stringify(formData));
-
-        alert("Registration successful");
-        navigate("/login");
+      navigate("/");
+      
     } catch (error) {
-        console.log(error);
-        alert("Registration failed");
+      console.log(error);
+      alert("Registration failed");
     }
   };
 
@@ -48,32 +44,18 @@ function RegisterPage() {
 
         <form onSubmit={handleRegister}>
           <FormInput
+            label="Name:"
+            type="text"
+            value={formData.name}
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder="Enter your name"
+          />
+          <FormInput
             label="Username:"
             type="text"
             value={formData.username}
             onChange={(e) => setFormData({ ...formData, username: e.target.value })}
             placeholder="Enter your username"
-          />
-          <FormInput
-            label="First Name:"
-            type="text"
-            value={formData.firstName}
-            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-            placeholder="Enter your first name"
-          />
-          <FormInput
-            label="Last Name:"
-            type="text"
-            value={formData.lastName}
-            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-            placeholder="Enter your last name"
-          />
-          <FormInput
-            label="City:"
-            type="text"
-            value={formData.city}
-            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-            placeholder="Enter your city"
           />
           <FormInput
             label="Email:"
@@ -99,6 +81,23 @@ function RegisterPage() {
               {showPassword ? <FaEye /> : <FaEyeSlash />}
             </span>
           </div>
+
+          <div className="relative">
+            <FormInput
+              label="Confirm Password:"
+              type={showPassword ? "text" : "password"}
+              value={formData.password_confirmation}
+              onChange={(e) => setFormData({ ...formData, password_confirmation: e.target.value })}
+              placeholder="Confirm password"
+            />
+
+            <span
+              className="absolute right-[12px] bottom-[14px] cursor-pointer text-movie-text-sec"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEye /> : <FaEyeSlash />}
+            </span>
+          </div>
           <div className="flex justify-between items-center mt-6">
             <button 
               className="px-6 py-2.5 bg-movie-accent text-movie-text-main rounded cursor-pointer hover:bg-[#1b97b2] transition-colors font-bold" 
@@ -107,13 +106,12 @@ function RegisterPage() {
               Create Account
             </button>
 
-            <button 
-              type="button"
-              onClick={() => navigate("/")} 
+            <Link 
+              to="/" 
               className="px-4 py-2 text-sm border border-gray-600 text-movie-text-main rounded hover:bg-movie-bg transition-colors cursor-pointer font-medium"
             >
               Back to Home
-            </button>
+            </Link>
           </div>
 
         </form>

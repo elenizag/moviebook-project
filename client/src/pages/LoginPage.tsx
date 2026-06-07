@@ -1,50 +1,31 @@
-import React from "react";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../services/authService";
+import { login } from "../services/authService";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import FormInput from "../components/FormInput";
 
 function LoginPage() {
   const [formData, setFormData] = useState({
-    usernameOrEmail: "",
+    email: "",
     password: "",
   });
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!formData.usernameOrEmail || !formData.password) {
+    if (!formData.email || !formData.password) {
         alert("Please fill all the fields");
         return;
     }
-    
 
     try {
-      //  const data = await loginUser(formData);      
-      //  localStorage.setItem("token", data.token);
-      //  localStorage.setItem("user", JSON.stringify(data.user));
+      await login(formData);
 
-      // demo code
-        const savedUserString = localStorage.getItem("mockUser");
-        if (!savedUserString) {
-            alert("User not found");
-            return;
-        }
-        const savedUser = JSON.parse(savedUserString);
-        if ((formData.usernameOrEmail === savedUser.email || formData.usernameOrEmail === savedUser.username) && formData.password === savedUser.password) {   // email: user@gmail.com, password: user12345
-          localStorage.setItem("token", "fake-demo-token-12345");
-          localStorage.setItem("user", JSON.stringify(savedUser));
-          alert("Login successful");
-          navigate("/home");
-        } else {
-          alert("Invalid email or password!");
-        }
-
-
+      navigate("/");
+      
     } catch (error) {
         console.log(error);
         alert("Login failed");
@@ -59,11 +40,11 @@ function LoginPage() {
         <form onSubmit={handleLogin}>
           <FormInput
             icon={<FaUser />}
-            label="Email / Username:"
+            label="Email:"
             type="text"
-            value={formData.usernameOrEmail}
-            onChange={(e) => setFormData({ ...formData, usernameOrEmail: e.target.value })}
-            placeholder="Email Address or Username"
+            value={formData.email}
+            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+            placeholder="Email Address"
           />
           <div className="relative">
             <FormInput

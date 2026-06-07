@@ -8,7 +8,7 @@ if (!APP_KEY) throw new Error('APP_KEY is required')
 export const cookieOptions: CookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax',
+  sameSite: 'strict',
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
 }
 

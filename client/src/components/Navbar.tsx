@@ -55,6 +55,15 @@ function Navbar() {
         {/* αν είναι συνδεδεμένος */}
         {isLoggedIn && (
           <>
+            {/* Search Bar */}
+            <div className=" px-4 flex justify-center ">
+              <input
+                type="text"
+                placeholder="Search movies..."
+                className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none focus:ring-2 focus:ring-movie-accent/50 transition-all"
+              />
+            </div>
+            
             <button 
                 onClick={() => { setIsDropdownOpen(false); navigate("/home"); }} className="text-sm font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-4">
               Home
@@ -105,9 +114,7 @@ function Navbar() {
                 
                 <div className="border-t border-gray-800 my-1"></div>
                 
-                <button onClick={handleLogout} className="flex items-center space-x-3 px-4 py-2.5 text-[#eb5959] hover:bg-movie-bg font-medium transition-colors text-left w-full">
-                  <FaSignOutAlt className="w-4" /> <span>Logout</span>
-                </button>
+                
               </div>
             )}
           </div>

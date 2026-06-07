@@ -1,4 +1,6 @@
-function FormInput({ label, type, value, onChange, placeholder, icon } : { label: string, type: string, value: string, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, placeholder: string, icon?: React.ReactNode }) {
+import type { ChangeEvent } from 'react'
+
+function FormInput({ label, type, value, onChange, placeholder, icon } : { label: string, type: string, value: string, onChange: (e: ChangeEvent<HTMLInputElement>) => void, placeholder: string, icon?: React.ReactNode }) {
   return (
     <div className="mb-[15px]">
       <label className="block mb-2 font-medium">{label}</label>

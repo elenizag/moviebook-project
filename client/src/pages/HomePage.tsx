@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   keepWatchingMovies,
@@ -7,15 +7,30 @@ import {
 } from "../data/movies";
 import HeroBanner from "../components/HeroBanner";
 import MovieSection from "../components/MovieSection";
+import { user } from "../services/authService"
 
 function HomePage() {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user") || "null");
+  const [currentUser, setCurrentUser] = useState<any | null>(null);
 
-  {
-    /* αν δεν είναι συνδεδεμένος */
-  }
-  if (!user) {
+  useEffect(() => {
+    let mounted = true;
+    // user is an async function returning the current user
+    (async () => {
+      try {
+        const u = await user();
+        if (mounted) setCurrentUser(u ?? null);
+      } catch (e) {
+        if (mounted) setCurrentUser(null);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // αν δεν είναι συνδεδεμένος
+  if (!currentUser) {
     return (
       <div className="min-h-[80vh] flex flex-col justify-center items-center text-center p-6 bg-movie-bg text-movie-text-main">
         <h2 className="text-5xl font-bold font-display mb-4">
@@ -49,20 +64,12 @@ function HomePage() {
   return (
     <div className="min-h-screen bg-movie-bg text-movie-text-main font-body">
       <main className="w-full px-16 py-14">
-        {/* Search Bar */}
-        <div className="flex justify-center mb-10">
-          <input
-            type="text"
-            placeholder="Search movies..."
-            className="w-full max-w-3xl h-14 px-5 bg-movie-surface text-white border-2 border-movie-accent rounded-xl text-center outline-none focus:ring-2 focus:ring-movie-accent/50 transition-all"
-          />
-        </div>
 
         <div className="bg-movie-surface rounded-xl border border-gray-800 p-8 shadow-md text-center mb-10 max-w-3xl mx-auto">
           <h2 className="text-4xl font-bold font-display mb-2">
             Welcome back,{" "}
             <span className="text-movie-accent">
-              {user.username || user.email}
+              {currentUser.username || currentUser?.email}
             </span>
             !
           </h2>
