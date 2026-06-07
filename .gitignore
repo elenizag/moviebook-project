@@ -4,7 +4,9 @@ server/node_modules
 
 # Env αρχεία (για ασφάλεια)
 client/.env
+!client/.env.example
 server/.env
+!server/.env.example
 # Build folders
 client/dist
 # System files
