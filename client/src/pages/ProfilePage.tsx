@@ -1,5 +1,5 @@
 import { FaUserCircle } from "react-icons/fa";
-import { getProfile } from "../services/userService";
+import { user as getprofile, updateProfile } from "../services/authService";
 import { useEffect, useState } from "react";
 import EditProfileModal from "../components/EditProfileModal";
 
@@ -11,26 +11,26 @@ interface UserProfile {
 }
 
 function ProfilePage() {
-  const [user, setUser] = useState<UserProfile | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    const saved = localStorage.getItem("currentUser");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.user || parsed;
+    }
+    return null
+  });
 
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        //const data = await getProfile();
-        //setUser(data);
-
-        // demo code
-        const savedUserString = localStorage.getItem("user");
-        if (savedUserString) {
-          const savedUser = JSON.parse(savedUserString);
-          setUser(savedUser);
-        } else {
-          setError("User not found. Please login.");
-        }
+        const data = await getprofile();
+        setUser(data);
+        localStorage.setItem("currentUser", JSON.stringify(data));
+        setError("");
 
       } catch (err: any) {
         setError(err.message || "Failed to load profile");
@@ -50,13 +50,32 @@ function ProfilePage() {
     return <p className="text-center mt-10 text-red-500">{error}</p>;
   }
 
-  const handleSaveChanges = (updatedUser: UserProfile) => {
-    setUser(updatedUser);
-    localStorage.setItem("user", JSON.stringify(updatedUser));
-    localStorage.setItem("mockUser", JSON.stringify(updatedUser));
+  const handleSaveChanges = async (updatedUser: UserProfile) => {
+    try {
+      const savedUserFromServer = await updateProfile(updatedUser);
+      setUser(savedUserFromServer);
+
+      const savedString = localStorage.getItem("currentUser");
+      if (savedString) {
+      const parsed = JSON.parse(savedString);
+      
+      {/* για το πως αποθηκευεται ο χρηστης στο backend */}
+      if (parsed.user) {
+        parsed.user = savedUserFromServer;
+        localStorage.setItem("currentUser", JSON.stringify(parsed));
+      } else {
+        localStorage.setItem("currentUser", JSON.stringify(savedUserFromServer));
+      }
+
+    } else {
+      localStorage.setItem("currentUser", JSON.stringify(savedUserFromServer));
+    }
 
     setIsModalOpen(false);
-    alert("Profile updated successfully!")
+      alert("Profile updated successfully!")
+    } catch (err) {
+      alert("Failed to update profile ")
+    }
   }
 
   return (
@@ -65,7 +84,7 @@ function ProfilePage() {
         
         <h2 className="text-2xl font-bold font-display mb-6 text-movie-text-main">Your Profile</h2>
 
-        {user?.profileImage ? (
+        {user?.profileImage && user.profileImage.trim() !== "" ? (
           <img
             src={user.profileImage}
             alt="Profile"

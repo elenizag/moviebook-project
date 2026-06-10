@@ -24,7 +24,14 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/feed" element={<FeedPage />} />
+        <Route
+          path="/feed"
+          element={
+            <ProtectedRoute>
+              <FeedPage />
+            </ProtectedRoute>
+          }
+        />
         {/* Θα προσθέσετε τα υπόλοιπα routes εδώ */}
       </Routes>
     </BrowserRouter>

@@ -93,3 +93,28 @@ export const logout = async () => {
 
 
 };
+
+export const updateProfile = async (updatedData: { name: string; username: string; email: string; profileImage?: string }) => {
+    try {
+        const response = await fetch(`${API_URL}/profile/update`, {
+            method: "PUT",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            },
+            body: JSON.stringify(updatedData),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data?.message || 'Failed to update profile on server');
+        }
+
+        return data;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};

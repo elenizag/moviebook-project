@@ -11,23 +11,40 @@ import { user } from "../services/authService"
 
 function HomePage() {
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState<any | null>(null);
+  const [currentUser, setCurrentUser] = useState<any | null>(() => {
+    const saved = localStorage.getItem("currentUser");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      return parsed.user || parsed;
+    }
+    return null;
+  });
 
   useEffect(() => {
     let mounted = true;
-    // user is an async function returning the current user
-    (async () => {
+    
+    const verifyUser = async () => {
       try {
         const u = await user();
-        if (mounted) setCurrentUser(u ?? null);
+        if (mounted) {
+          const freshUser = u?.user || u;
+          setCurrentUser(freshUser ?? null);
+          if (freshUser) {
+            localStorage.setItem("currentUser", JSON.stringify(freshUser));
+          }
+        }
       } catch (e) {
         if (mounted) setCurrentUser(null);
       }
-    })();
+    };
+
+    verifyUser();
+    
     return () => {
       mounted = false;
     };
   }, []);
+
 
   // αν δεν είναι συνδεδεμένος
   if (!currentUser) {
@@ -69,7 +86,7 @@ function HomePage() {
           <h2 className="text-4xl font-bold font-display mb-2">
             Welcome back,{" "}
             <span className="text-movie-accent">
-              {currentUser.username || currentUser?.email}
+              {currentUser.name || currentUser.username || currentUser?.email}
             </span>
             !
           </h2>
