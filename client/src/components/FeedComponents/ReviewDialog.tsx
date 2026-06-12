@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ProfPic from "../../Assets/ProfPic.png";
-
+import movieImage from "../../Assets/MoviePoster1.jpg";
 interface ReviewDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -110,9 +110,24 @@ export default function ReviewDialog({
                     <li
                       key={index}
                       onClick={() => handleSelectMovie(movie)}
-                      className="px-3 py-2 text-sm text-movie-text-sec hover:bg-movie-surface hover:text-white rounded-sm cursor-pointer transition-colors"
+                      className="px-3 py-2 text-sm  hover:bg-movie-surface hover:text-white rounded-sm cursor-pointer transition-colors"
                     >
-                      {movie}
+                      <div className="flex gap-4">
+                        <img
+                          src={movieImage}
+                          alt={movie}
+                          className="w-18 h-18 object-fit"
+                        />
+                        <div className="flex flex-col gap-0.5">
+                          <h2 className="text-movie-text text-md">{movie}</h2>{" "}
+                          <span className="text-movie-text-sec text-sm">
+                            1992
+                          </span>
+                          <span className="text-movie-text-sec text-sm">
+                            Thriller, Action
+                          </span>
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>

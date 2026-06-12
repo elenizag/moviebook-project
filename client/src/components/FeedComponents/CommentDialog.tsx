@@ -14,6 +14,8 @@ interface Comment {
   username: string;
   text: string;
   timeAgo: string;
+  replies?: Comment[];
+  likes: boolean;
 }
 
 export default function CommentDialog({
@@ -21,9 +23,13 @@ export default function CommentDialog({
   onClose,
   review,
 }: CommentDialogProps) {
-  const [commentText, setCommentText] = useState("");
+  const [commentText, setCommentText] = useState<string>("");
+  const [replyText, setReplyText] = useState<string>("");
   const [comments, setComments] = useState<Comment[]>([]);
-
+  const [activeReplyId, setActiveReplyId] = useState<string | null>(null);
+  const [activeShowReplyId, setActiveShowReplyId] = useState<string | null>(
+    null,
+  );
   // Φόρτωση σχολίων από το localStorage
   useEffect(() => {
     if (isOpen && review?.id) {
@@ -37,6 +43,7 @@ export default function CommentDialog({
             username: "Dark_Knight",
             text: "Excellent movie! Tottaly would recommend.",
             timeAgo: "2h ago",
+            likes: false,
           },
         ]);
       }
@@ -54,6 +61,7 @@ export default function CommentDialog({
       username: "Not_Batman",
       text: commentText.trim(),
       timeAgo: "Just now",
+      likes: false,
     };
 
     const updatedComments = [...comments, newComment];
@@ -64,9 +72,50 @@ export default function CommentDialog({
     );
     setCommentText("");
   };
+  const handleReply = (parentId: string, replyText: string) => {
+    const newReply: Comment = {
+      id: Date.now().toString(),
+      username: "Not_Batman", //
+      text: replyText.trim(),
+      timeAgo: "Just now",
+      replies: [],
+      likes: false,
+    };
 
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === parentId) {
+        return {
+          ...comment,
+          replies: [...(comment.replies || []), newReply],
+        };
+      }
+      return comment;
+    });
+
+    setComments(updatedComments);
+    localStorage.setItem(
+      `comments_review_${review.id}`,
+      JSON.stringify(updatedComments),
+    );
+
+    setReplyText("");
+  };
+  const handleLike = (id: string) => {
+    const updatedComments = comments.map((comment) => {
+      if (comment.id === id) {
+        return { ...comment, likes: !comment.likes };
+      }
+      return comment;
+    });
+
+    setComments(updatedComments);
+    localStorage.setItem(
+      `comments_review_${review.id}`,
+      JSON.stringify(updatedComments),
+    );
+  };
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 ">
       {/* BACKDROP */}
       <div
         className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-all duration-300 ease-in-out"
@@ -122,6 +171,82 @@ export default function CommentDialog({
                 <p className="text-sm text-movie-text-sec/90 leading-relaxed">
                   {comment.text}
                 </p>
+                {comment.replies && comment.replies.length > 0 ? (
+                  activeShowReplyId === comment.id ? (
+                    comment.replies.map((reply) => (
+                      <div
+                        className="flex flex-col mt-3 bg-movie-surface rounded-lg p-2 mx-4 my-1"
+                        key={reply.id}
+                      >
+                        <div className="flex justify-between">
+                          <h1 className="text-movie-accent font-semibold">
+                            {reply.username}
+                          </h1>
+                          <h3 className="text-xs text-movie-text-sec">
+                            {reply.timeAgo}
+                          </h3>
+                        </div>
+                        <p className="px-1 mt-1 text-movie-text-main">
+                          {reply.text}
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <button
+                      onClick={() => setActiveShowReplyId(comment.id)}
+                      className="text-movie-accent text-sm m-2 text-start cursor-pointer hover:underline"
+                    >
+                      Show replies ({comment.replies.length})
+                    </button>
+                  )
+                ) : null}
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleLike(comment.id)}
+                    className={`flex w-19 h-8 justify-center items-center gap-1.5 px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 font-medium 
+    ${
+      comment.likes
+        ? "bg-movie-accent/20 text-movie-accent font-bold shadow-xs shadow-movie-accent"
+        : "bg-movie-accent/10 text-movie-accent hover:bg-movie-accent/20"
+    }`}
+                  >
+                    {comment.likes ? "Liked" : "👍 Like"}
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setActiveReplyId(comment.id);
+                    }}
+                    className="flex w-19 h-8 justify-center items-center gap-1.5 hover:text-movie-accent bg-movie-accent/10 hover:bg-movie-accent/20 text-movie-accent px-3 py-1.5 rounded-lg cursor-pointer transition-all duration-200 font-medium"
+                  >
+                    Reply
+                  </button>
+                </div>
+                {activeReplyId === comment.id && (
+                  <form
+                    className="flex  gap-3 mt-1 shrink-0"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleReply(comment.id, replyText);
+                      setActiveReplyId(null);
+                    }}
+                  >
+                    <textarea
+                      placeholder="Reply to @Dark_knight"
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                      rows={1}
+                      className="w-full bg-movie-surface/40 border border-movie-border/80 rounded-md px-2 py-1 text-sm text-white placeholder-movie-text-sec/40 focus:outline-none focus:ring-2 focus:ring-movie-accent/50 focus:border-movie-accent resize-none transition-all leading-relaxed"
+                    />
+                    <button
+                      type="submit"
+                      disabled={!replyText.trim()}
+                      className="w-full sm:w-auto inline-flex justify-center items-center rounded-md bg-movie-accent text-white font-semibold text-sm px-5 py-2 hover:bg-opacity-90 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer shadow-sm active:scale-98"
+                    >
+                      Post
+                    </button>
+                  </form>
+                )}
               </div>
             ))}
           </div>

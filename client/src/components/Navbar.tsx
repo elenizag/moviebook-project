@@ -1,21 +1,44 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { FaUserCircle, FaSignOutAlt, FaCog, FaHeart, FaList, FaStar, FaUser } from "react-icons/fa";
+import { user, logout } from "../services/authService";
+import LogoutButton from "./LogoutButton";
 
 function Navbar() {
     const navigate = useNavigate();
-    const isLoggedIn = !!localStorage.getItem("token");
-    const user = JSON.parse(localStorage.getItem("user") || "null");
-
+    const location = useLocation();
+    const [currentUser, setCurrentUser] = useState<any | null>(null);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const handleLogout = () => {
-        setIsDropdownOpen(false);
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-        navigate("/");
-    }
+    useEffect(() => {
+        let mounted = true;
+        
+        (async () => {
+            try {
+                const u = await user();
+                if (mounted) setCurrentUser(u ?? null);
+            } catch (e) {
+                if (mounted) setCurrentUser(null);
+            }
+        })();
+
+        return () => {
+            mounted = false;
+        };
+    }, [location.pathname]);
+
+    const handleLogout = async () => {
+        try {
+            setIsDropdownOpen(false);
+            await logout();
+            setCurrentUser(null);
+            navigate("/");
+        } catch (error) {
+            console.log(error);
+            alert("Logout failed");
+        }
+    };
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -34,14 +57,14 @@ function Navbar() {
     <nav className="w-full bg-movie-surface border-b border-gray-800 px-6 py-4 flex justify-between items-center shadow-lg">
       <h1 
         className="text-2xl font-bold font-display text-movie-accent tracking-wide cursor-pointer select-none" 
-        onClick={() => { setIsDropdownOpen(false);navigate(isLoggedIn ? "/home" : "/")}}
+        onClick={() => { setIsDropdownOpen(false);navigate(currentUser ? "/home" : "/")}}
         >
             MovieBook
       </h1>
       
       <div className="flex items-center">
         {/* αν δεν είναι συνδεδεμένος */}
-        {!isLoggedIn && (
+        {!currentUser && (
           <>
             <button onClick={() => { setIsDropdownOpen(false); navigate("/login")}} className="px-4 py-2 text-sm text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer">
               Login
@@ -53,7 +76,7 @@ function Navbar() {
         )}
 
         {/* αν είναι συνδεδεμένος */}
-        {isLoggedIn && (
+        {currentUser && (
           <>
             {/* Search Bar */}
             <div className=" px-4 flex justify-center ">
@@ -72,14 +95,16 @@ function Navbar() {
               Feed
             </button>
 
+            <LogoutButton />
+
             <div className="relative" ref={dropdownRef}>
             {/* Η εικόνα του χρήστη */}
             <button 
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 text-movie-accent hover:ring-2 hover:ring-movie-accent transition-all cursor-pointer overflow-hidden focus:outline-none"
             >
-              {user?.avatarUrl ? (
-                <img src={user.avatarUrl} alt="profile" className="w-full h-full object-cover" />
+              {currentUser?.avatarUrl ? (
+                <img src={currentUser.avatarUrl} alt="profile" className="w-full h-full object-cover" />
               ) : (
                 <FaUserCircle className="w-full h-full text-2xl" />
               )}
@@ -111,9 +136,7 @@ function Navbar() {
                 <button onClick={() => { setIsDropdownOpen(false); navigate("/settings"); }} className="flex items-center space-x-3 px-4 py-2.5 text-movie-text-main hover:bg-movie-bg hover:text-movie-accent transition-colors text-left w-full">
                   <FaCog className="text-gray-500 w-4" /> <span>Settings</span>
                 </button>
-                
-                <div className="border-t border-gray-800 my-1"></div>
-                
+                                
                 
               </div>
             )}

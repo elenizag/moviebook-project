@@ -2,9 +2,9 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const token = localStorage.getItem("token");
+  const currentUser = localStorage.getItem("currentUser");
 
-  if (!token) {
+  if (!currentUser) {
     return <Navigate to="/" />;
   }
 
