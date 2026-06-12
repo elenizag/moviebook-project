@@ -1,15 +1,13 @@
 import { z } from 'zod'
 
-export const loginSchema = z.object({
+const login = z.object({
   body: z.object({
     email: z.email('Invalid email format.'),
     password: z.string().min(8, 'Password must be at least 8 characters.')
   })
 })
 
-export type LoginInput = z.infer<typeof loginSchema>['body']
-
-export const registerSchema = z.object({
+const register = z.object({
   body: z.object({
     name: z.string().min(3, 'Name must be at least 3 characters.'),
     username: z.string().min(4, 'Username must be at least 4 characters.'),
@@ -22,5 +20,12 @@ export const registerSchema = z.object({
   })
 })
 
-export type RegisterInput = z.infer<typeof registerSchema>['body']
+export type LoginInput = z.infer<typeof login>['body']
+export type RegisterInput = z.infer<typeof register>['body']
 
+const schemas = {
+  login,
+  register,
+}
+
+export default schemas

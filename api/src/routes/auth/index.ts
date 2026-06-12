@@ -1,12 +1,12 @@
 import { Router } from 'express'
-import controller from './controller'
 import { validator, auth } from '../../middlewares'
-import { loginSchema, registerSchema } from './schema'
+import schemas from './schema'
+import controller from './controller'
 
 const router: Router = Router()
 
-router.post('/login', validator(loginSchema), controller.login)
-router.post('/register', validator(registerSchema), controller.register)
+router.post('/login', validator(schemas.login), controller.login)
+router.post('/register', validator(schemas.register), controller.register)
 router.post('/logout', auth, controller.logout)
 router.get('/me', auth, controller.me)
 
