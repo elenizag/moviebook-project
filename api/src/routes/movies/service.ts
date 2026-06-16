@@ -28,7 +28,7 @@ class Movie {
     }
   }
 
-  async list(type: string, page: number | string = 1) {
+  async list(type: string, page: string) {
     try {
       const data = await this.fetcher(`/movie/${type}?language=en-US&page=${page}`)
 
@@ -42,7 +42,7 @@ class Movie {
     }
   }
 
-  async search(query: string, page: number | string = 1) {
+  async search(query: string, page: string) {
     try {
       const data = await this.fetcher(`/search/movie?query=${query}&language=en-US&page=${page}`)
 
