@@ -27,7 +27,6 @@ async function auth(req: Request, res: Response, next: NextFunction) {
       name: user.name,
       username: user.username,
       email: user.email,
-      password: user.password,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     }
