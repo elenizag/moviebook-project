@@ -1,10 +1,26 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import MovieGallery from "../components/moviePageComponents/movieGallery";
+
+interface CastMember {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string | null;
+}
+interface CrewMember {
+  id: number;
+  name: string;
+  job: string;
+  department: string;
+  profile_path: string | null;
+}
+
 export default function MoviePage() {
   const { id } = useParams<{ id: string }>();
   const [movie, setMovie] = useState<any | null>(null);
-
+  const [castData, setCastData] = useState<CastMember[]>([]);
+  const [crewData, setCrewData] = useState<CrewMember | null>();
   useEffect(() => {
     async function getMovie(movieId: string | undefined) {
       if (!movieId) return;
@@ -20,6 +36,20 @@ export default function MoviePage() {
       }
     }
 
+    async function getCredits() {
+      if (!id) return;
+      try {
+        const response = await fetch(
+          `http://localhost:8000/api/movies/${id}/credits`,
+        );
+        const data = await response.json();
+        setCastData(data.cast?.slice(0, 12) || []);
+        setCrewData(data.crew?.[0] || null);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getCredits();
     getMovie(id);
   }, [id]);
 
@@ -27,6 +57,8 @@ export default function MoviePage() {
     return <div className="p-8 text-white">Loading Movie...</div>;
   }
   console.log("movie json: ", movie);
+  console.log("cast json", castData);
+  console.log("crew json", crewData);
   return (
     <div className="flex flex-col">
       <section
@@ -59,16 +91,6 @@ export default function MoviePage() {
               {movie.vote_average.toFixed(1)} ⭐
             </span>
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-4 mt-4">
-            <button className="bg-movie-highlight px-6 py-2 rounded font-bold hover:bg-movie-highlight/80 cursor-pointer active:bg-movie-highlight">
-              Play Now
-            </button>
-            <button className="bg-movie-accent px-6 py-2 rounded cursor-pointer hover:bg-movie-accent/80 active:bg-movie-accent/60">
-              WatchList
-            </button>
-          </div>
         </div>
       </section>
 
@@ -80,6 +102,41 @@ export default function MoviePage() {
           <p className="text-gray-300 leading-relaxed text-lg">
             {movie.overview}
           </p>
+          <div>
+            <h2 className="text-2xl mt-5 font-bold border-b border-gray-700 pb-2">
+              Cast & Crew
+            </h2>
+
+            <h3 className="text-xl mt-2 font-bold text-movie-accent">
+              Top Cast:
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2">
+              {castData.map((cast) => (
+                <div
+                  key={cast.id}
+                  className="flex justify-start items-center gap-4 my-3"
+                >
+                  <img
+                    src={
+                      cast.profile_path
+                        ? `https://image.tmdb.org/t/p/w185${cast.profile_path}`
+                        : "https://placehold.co/185x278/1a1a1a/ffffff?text=No+Image"
+                    }
+                    alt={cast.name}
+                    className="w-20 h-22 rounded-3xl object-cover shadow-md"
+                  />
+                  <div className="flex flex-col">
+                    <span className="text-white font-semibold text-base">
+                      {cast.name}
+                    </span>
+                    <span className="text-neutral-400 text-sm">
+                      {cast.character}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="flex flex-col gap-6">
@@ -116,6 +173,30 @@ export default function MoviePage() {
             <p className="text-gray-300 text-sm">
               {movie.production_companies.map((c) => c.name).join(", ")}
             </p>
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold mb-4 border-b border-gray-700 pb-2">
+              Director
+            </h2>
+            <div
+              key={crewData?.id}
+              className="flex justify-start items-center gap-4 my-3"
+            >
+              <img
+                src={
+                  crewData?.profile_path
+                    ? `https://image.tmdb.org/t/p/w185${crewData.profile_path}`
+                    : "https://placehold.co/185x278/1a1a1a/ffffff?text=No+Image"
+                }
+                alt={crewData?.name}
+                className="w-16 h-18 rounded-3xl object-cover shadow-md"
+              />
+              <div className="flex flex-col">
+                <span className="text-white font-semibold text-base">
+                  {crewData?.name}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -34,13 +34,7 @@ export default function MovieGallery({
         console.error(error);
       }
     }
-    async function getMoviesInfo() {
-      try {
-        const repsonse = await fetch(``);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+
     getMoviesByCategory(category);
   }, [category]);
 
