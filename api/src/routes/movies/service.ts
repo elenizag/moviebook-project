@@ -1,77 +1,94 @@
 class Movie {
   async fetcher(path: string, options: RequestInit | undefined = {}) {
-    const THEMOVIEDB_API_URL = process.env.THEMOVIEDB_API_URL
-    const THEMOVIEDB_ACCESS_TOKEN = process.env.THEMOVIEDB_ACCESS_TOKEN
+    const THEMOVIEDB_API_URL = process.env.THEMOVIEDB_API_URL;
+    const THEMOVIEDB_ACCESS_TOKEN = process.env.THEMOVIEDB_ACCESS_TOKEN;
 
     if (!THEMOVIEDB_API_URL || !THEMOVIEDB_ACCESS_TOKEN) {
-      throw new Error('The Movie Database environment variables are not configured.')
+      throw new Error(
+        "The Movie Database environment variables are not configured.",
+      );
     }
 
-    const url = `${THEMOVIEDB_API_URL}${path}`
+    const url = `${THEMOVIEDB_API_URL}${path}`;
 
     const init: RequestInit = {
       headers: {
-        accept: 'application/json',
-        Authorization: `Bearer ${THEMOVIEDB_ACCESS_TOKEN}`
+        accept: "application/json",
+        Authorization: `Bearer ${THEMOVIEDB_ACCESS_TOKEN}`,
       },
-      ...options
-    }
+      ...options,
+    };
 
     try {
-      const response = await fetch(url, init)
-      const data = await response.json()
+      const response = await fetch(url, init);
+      const data = await response.json();
 
-      return data
+      return data;
     } catch (error) {
       if (error instanceof Error) {
-        throw error
+        throw error;
       }
 
-      throw new Error(String(error))
+      throw new Error(String(error));
     }
   }
 
   async list(type: string, page: string) {
     try {
-      const data = await this.fetcher(`/movie/${type}?language=en-US&page=${page}`)
+      const data = await this.fetcher(
+        `/movie/${type}?language=en-US&page=${page}`,
+      );
 
-      return data
+      return data;
     } catch (error) {
       if (error instanceof Error) {
-        throw error
+        throw error;
       }
 
-      throw new Error(String(error))
+      throw new Error(String(error));
     }
   }
 
   async search(query: string, page: string) {
     try {
-      const data = await this.fetcher(`/search/movie?query=${query}&language=en-US&page=${page}`)
+      const data = await this.fetcher(
+        `/search/movie?query=${query}&language=en-US&page=${page}`,
+      );
 
-      return data
+      return data;
     } catch (error) {
       if (error instanceof Error) {
-        throw error
+        throw error;
       }
 
-      throw new Error(String(error))
+      throw new Error(String(error));
     }
   }
 
   async detail(id: string) {
     try {
-      const data = await this.fetcher(`/movie/${id}?language=en-US`)
+      const data = await this.fetcher(`/movie/${id}?language=en-US`);
 
-      return data
+      return data;
     } catch (error) {
       if (error instanceof Error) {
-        throw error
+        throw error;
       }
 
-      throw new Error(String(error))
+      throw new Error(String(error));
+    }
+  }
+  async credits(id: string) {
+    try {
+      const data = await this.fetcher(`/movie/${id}/credits?language=en-US`);
+      return data;
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
     }
   }
 }
 
-export default new Movie()
+export default new Movie();
