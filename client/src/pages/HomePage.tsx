@@ -21,8 +21,23 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
   const topRatedData = use(topRatedPromise);
 
   const currentUser = (currentUserData?.user || currentUserData) ?? null;
-  const trending = popularData.results || [];
-  const topRated = topRatedData.results || [];
+ const trending = popularData.results?.map((movie: any) => ({
+  id: movie.id,
+  title: movie.title,
+  rating: movie.vote_average,
+  genre: movie.genre_ids?.[0] || "",
+  poster_path: movie.poster_path,
+  release_date: movie.release_date
+})) || [];
+
+const topRated = topRatedData.results?.map((movie: any) => ({
+  id: movie.id,
+  title: movie.title,
+  rating: movie.vote_average,
+  genre: movie.genre_ids?.[0] || "",
+  poster_path: movie.poster_path,
+  release_date: movie.release_date
+})) || [];
 
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [searchLoading, setSearchLoading] = useState(false);
@@ -86,7 +101,7 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
 
           <div className="space-y-10 mt-10">
             {/*<MovieSection title="Keep Watching" movies={keepWatching} isLoggedIn={true} /> */}
-            <MovieSection title="Trending Movies" movies={trending} isLoggedIn={true} />
+            <MovieSection title="Trending Movies" movies={trending} isLoggedIn={true} type="trending" />
             <MovieSection title="Top Rated" movies={topRated} isLoggedIn={true} />
           </div>
         </>
@@ -97,3 +112,5 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
 }
 
 export default HomePage;
+
+

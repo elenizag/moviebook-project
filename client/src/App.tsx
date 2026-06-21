@@ -9,6 +9,7 @@ import FeedPage from "./pages/FeedPage";
 import MainLayout from "./components/Layouts/MainLayout";
 import NavBarLayout from "./components/Layouts/NavBarLayout";
 import LandingPage from "./pages/LandingPage";
+import TrendingPage from "./pages/TrendingPage";
 
 function App() {
   return (
@@ -55,6 +56,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+           <Route
+          path="/trending"
+          element={
+            <ProtectedRoute>
+              <MainLayout>
+                <TrendingPage />
+              </MainLayout>
+            </ProtectedRoute>
+          }
+          />
         {/* Θα προσθέσετε τα υπόλοιπα routes εδώ */}
       </Routes>
     </BrowserRouter>
