@@ -8,7 +8,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import FeedPage from "./pages/FeedPage";
 import MainLayout from "./components/Layouts/MainLayout";
 import NavBarLayout from "./components/Layouts/NavBarLayout";
-import LandingPage from "./pages/LandingPage";
 import MoviePage from "./pages/MoviePage";
 
 function App() {
@@ -22,11 +21,11 @@ function App() {
               <Suspense
                 fallback={
                   <div className="min-h-screen bg-movie-bg flex items-center justify-center text-movie-accent animate-pulse">
-                    Loading Preview...
+                    Loading MovieBook...
                   </div>
                 }
               >
-                <LandingPage />
+                <HomePage />
               </Suspense>
             </MainLayout>
           }
@@ -34,19 +33,17 @@ function App() {
         <Route
           path="/home"
           element={
-            <ProtectedRoute>
-              <MainLayout>
-                <Suspense
-                  fallback={
-                    <div className="min-h-screen bg-movie-bg flex items-center justify-center text-movie-accent animate-pulse">
-                      Loading MovieBook Dashboard...
-                    </div>
-                  }
-                >
-                  <HomePage />
-                </Suspense>
-              </MainLayout>
-            </ProtectedRoute>
+            <MainLayout>
+              <Suspense
+                fallback={
+                  <div className="min-h-screen bg-movie-bg flex items-center justify-center text-movie-accent animate-pulse">
+                    Loading MovieBook...
+                  </div>
+                }
+              >
+                <HomePage />
+              </Suspense>
+            </MainLayout>
           }
         />
         <Route path="/login" element={<LoginPage />} />
@@ -74,11 +71,9 @@ function App() {
         <Route
           path="/movies/:id"
           element={
-            <ProtectedRoute>
-              <MainLayout>
-                <MoviePage />
-              </MainLayout>
-            </ProtectedRoute>
+            <MainLayout>
+              <MoviePage />
+            </MainLayout>
           }
         />
         {/* Θα προσθέσετε τα υπόλοιπα routes εδώ */}

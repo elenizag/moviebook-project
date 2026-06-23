@@ -8,6 +8,7 @@ type MovieSectionProps = {
     title: string;
     rating: number;
     genre: string;
+    poster_path: string | undefined;
   }[];
 };
 
@@ -31,6 +32,7 @@ function MovieSection({
             rating={movie.rating ? movie.rating.toString() : "N/A"}
             genre={movie.genre}
             isLoggedIn={isLoggedIn}
+            poster_path={movie.poster_path}
           />
         ))}
       </div>

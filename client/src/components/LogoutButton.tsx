@@ -13,7 +13,7 @@ function LogoutButton({onLogoutSuccess, className}: LogoutProp) {
   const handleLogout = async () => {
     try {
       await logout(); 
-
+      window.dispatchEvent(new Event("authChange"));
     } catch (error) {
       console.log(error);
     } finally {

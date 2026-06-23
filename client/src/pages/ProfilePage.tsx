@@ -87,7 +87,7 @@ function ProfilePage() {
 
   return (
     <div className="min-h-[80vh] flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-90 bg-movie-surface rounded-lg border border-[#b4b4b4] p-7.5 flex flex-col items-center">
+      <div className="w-full sm:w-[400px] bg-movie-surface rounded-lg border border-[#b4b4b4] p-7.5 flex flex-col items-center">
         <h2 className="text-2xl font-bold font-display mb-6 text-movie-text-main">
           Your Profile
         </h2>
@@ -96,22 +96,22 @@ function ProfilePage() {
           <FaUserCircle className="w-full h-full text-movie-text-sec" />
         </div>
 
-        <div className="w-full text-left space-y-3 mb-6 bg-movie-bg/30 p-4 rounded border border-gray-700/50">
-          <p className="text-sm text-movie-text-main m-1 flex items-center">
+        <div className="w-full text-left space-y-4 mb-8 bg-movie-bg/30 p-5 rounded border border-gray-700/50">
+          <p className="text-sm text-movie-text-main m-2 flex items-center">
             <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">
               Name:
             </strong>
             <span className="text-movie-text-main">{user?.name}</span>
           </p>
 
-          <p className="text-sm text-movie-text-main m-1 flex items-center">
+          <p className="text-sm text-movie-text-main m-2 flex items-center">
             <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">
               Username:
             </strong>
             <span className="text-movie-text-main">{user?.username}</span>
           </p>
 
-          <p className="text-sm text-movie-text-main m-1 flex items-center">
+          <p className="text-sm text-movie-text-main m-2 flex items-center">
             <strong className="text-movie-text-sec font-medium inline-block w-24 shrink-0">
               Email:
             </strong>

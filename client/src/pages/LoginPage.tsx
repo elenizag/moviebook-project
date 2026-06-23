@@ -25,6 +25,7 @@ function LoginPage() {
 
     try {
       await login(formData);
+      window.dispatchEvent(new Event("authChange"));
       navigate("/");
       
     } catch (error) {

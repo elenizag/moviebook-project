@@ -1,6 +1,7 @@
 import React, { useState, useEffect }from "react";
 import Navbar from "../Navbar";
 import { user } from "../../services/authService";
+import { useLocation } from "react-router-dom";
 
 
 interface LayoutProps {
@@ -10,6 +11,7 @@ interface LayoutProps {
 function NavBarLayout({ children }: LayoutProps) {
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
       const checkUser = async () => {
@@ -21,7 +23,7 @@ function NavBarLayout({ children }: LayoutProps) {
         }
       };
       checkUser();
-    }, []);
+    }, [location.pathname]);
   
     const handleLogoutSuccess = () => {
       setCurrentUser(null);
@@ -40,7 +42,7 @@ function NavBarLayout({ children }: LayoutProps) {
       <main className="flex-grow">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
-            return React.cloneElement(child, { searchQuery } as any);
+            return React.cloneElement(child, { searchQuery, currentUser } as any);
           }
           return child;
         })}

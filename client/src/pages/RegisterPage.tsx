@@ -54,7 +54,7 @@ function RegisterPage() {
         email: formData.email,
         password: formData.password,
       });
-      
+      window.dispatchEvent(new Event("authChange"));
       navigate("/");
       
     } catch (error) {

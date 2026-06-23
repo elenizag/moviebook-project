@@ -1,4 +1,4 @@
-import React, { useEffect, useState, use } from "react";
+{/*import React, { useEffect, useState, use } from "react";
 import { useNavigate } from "react-router-dom";
 import { user } from "../services/authService"
 import MovieSection from "../components/MovieSection";
@@ -60,7 +60,7 @@ function LandingPage() {
           </div>
         </div>
 
-        {/* MovieSection */}
+        
         <div className="flex justify-between items-center mb-2 max-w-7xl mx-auto">
           <MovieSection title="Trending Movies" movies={sampleMovies} isLoggedIn={false} />
           <button className="text-sm text-movie-accent hover:text-[#1b97b2] font-semibold transition-colors cursor-pointer flex items-center gap-1">
@@ -74,3 +74,5 @@ function LandingPage() {
 }
 
 export default LandingPage;
+
+*/}
