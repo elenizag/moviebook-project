@@ -7,9 +7,10 @@ type MovieCardProps = {
   genre: string;
   isLoggedIn: boolean;
   poster_path?: string;
+  release_date?: string;
 };
 
-function MovieCard({ id, title, rating, genre, isLoggedIn, poster_path }: MovieCardProps) {
+function MovieCard({ id, title, rating, genre, isLoggedIn, poster_path, release_date }: MovieCardProps) {
   const navigate = useNavigate();
 
   const handleCardClick = () => {
@@ -35,7 +36,7 @@ function MovieCard({ id, title, rating, genre, isLoggedIn, poster_path }: MovieC
 
       <div className="movie-info p-2 bg-movie-surface">
         <h3 className="font-bold text-base truncate">{title}</h3>
-        <p className="movie-meta">2024 • {genre}</p>
+        <p className="movie-meta">{release_date ? new Date(release_date).getFullYear() : "—"} • {genre}</p>
         <p className="movie-rating">⭐ {rating}</p>
       </div>
     </div>

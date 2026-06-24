@@ -22,6 +22,10 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
   const popularData = use(popularPromise);
   const topRatedData = use(topRatedPromise);
   const trending = popularData.results || [];
+  const randomBackdrops = trending
+  .filter((movie: any) => movie.backdrop_path)
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 3);
   const topRated = topRatedData.results || [];
   const [currentTrendingPage, setCurrentTrendingPage] = useState(0);
   const moviesPerPage = 5; 
@@ -132,7 +136,7 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
             </div>
           )}
 
-          { isLoggedIn && <HeroBanner /> }
+          <HeroBanner backdrops={randomBackdrops} />
 
           <div className="space-y-10 mt-10">
             <div className="max-w-7xl mx-auto flex flex-col gap-8">

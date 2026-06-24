@@ -43,7 +43,7 @@ function Navbar({isLoggedIn, currentUser, onLogout, searchQuery, setSearchQuery}
     return (
     <nav className="w-full bg-movie-surface border-b border-gray-800 px-6 py-4 flex justify-between items-center shadow-lg">
       <h1 
-        className="text-2xl font-bold font-display text-movie-accent tracking-wide cursor-pointer select-none" 
+        className="text-3xl font-bold font-display text-movie-accent tracking-wide cursor-pointer select-none" 
         onClick={() => { setIsDropdownOpen(false); navigate(isLoggedIn ? "/home" : "/")}}
         >
           MovieBook
@@ -69,7 +69,7 @@ function Navbar({isLoggedIn, currentUser, onLogout, searchQuery, setSearchQuery}
 
         <button 
           onClick={() => { setIsDropdownOpen(false); setSearchQuery(""); navigate(isLoggedIn ? "/home" : "/"); }}
-          className="text-sm font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-4">
+          className="text-lg font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-4">
             Home
         </button>
 
@@ -82,7 +82,7 @@ function Navbar({isLoggedIn, currentUser, onLogout, searchQuery, setSearchQuery}
               setIsAuthModalOpen(true); 
             }
           }} 
-          className="text-sm font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-5"
+          className="text-lg font-medium text-movie-text-main hover:text-movie-accent transition-colors cursor-pointer mr-5"
         >
           Feed
         </button>

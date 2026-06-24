@@ -9,6 +9,7 @@ type MovieSectionProps = {
     rating: number;
     genre: string;
     poster_path: string | undefined;
+    release_date?: string;
   }[];
 };
 
@@ -30,6 +31,7 @@ function MovieSection({
             id={movie.id}
             title={movie.title}
             rating={movie.rating ? movie.rating.toString() : "N/A"}
+            release_date={movie.release_date}
             genre={movie.genre}
             isLoggedIn={isLoggedIn}
             poster_path={movie.poster_path}

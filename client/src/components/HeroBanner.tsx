@@ -6,16 +6,16 @@ const heroSlides = [
     description: "Search and discover movies based on your mood, interests, and favorite genres.",
   },
   {
-    title: "Watch it.",
-    description: "Keep track of the movies you are currently watching and never lose your place.",
+    title: "Rate it.",
+    description: "Share your opinion, rate movies, and help the community discover what's worth watching.",
   },
   {
-    title: "Rate it.",
-    description: "Share your opinion, rate movies, and help the community discover what is worth watching.",
+    title: "Talk about it.",
+    description: "Read reviews, join discussions, and see what the community thinks.",
   },
 ];
 
-function HeroBanner() {
+function HeroBanner({ backdrops }: { backdrops: any[] }) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ function HeroBanner() {
       setActiveSlide((previousSlide) =>
         previousSlide === heroSlides.length - 1 ? 0 : previousSlide + 1
       );
-    }, 4000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
@@ -31,7 +31,12 @@ function HeroBanner() {
   const currentSlide = heroSlides[activeSlide];
 
   return (
-    <section className="max-w-[1500px] mx-auto mb-12 px-12 py-16 bg-movie-surface rounded-2xl border border-movie-accent shadow-lg text-left">
+ <section 
+  className="max-w-[1500px] mx-auto mb-12 px-12 py-16 rounded-2xl border border-movie-accent shadow-lg text-left bg-cover bg-center transition-all duration-1000"
+  style={{
+    backgroundImage: `linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(https://image.tmdb.org/t/p/original${backdrops[activeSlide]?.backdrop_path})`
+  }}
+>
       <h2 className="text-5xl font-bold text-movie-accent mb-4">
         {currentSlide.title}
       </h2>
