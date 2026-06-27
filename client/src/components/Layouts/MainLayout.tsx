@@ -30,8 +30,7 @@ function MainLayout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-movie-bg">
-      <Navbar 
+      <div className="flex flex-col min-h-screen w-full max-w-full overflow-x-hidden bg-movie-bg">      <Navbar 
         currentUser={currentUser} 
         isLoggedIn={!!currentUser} 
         onLogout={handleLogoutSuccess}
@@ -39,7 +38,7 @@ function MainLayout({ children }: LayoutProps) {
         setSearchQuery={setSearchQuery}
       />
 
-      <main className="flex-grow">
+      <main className="flex-grow w-full max-w-full">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, { searchQuery, currentUser } as any);

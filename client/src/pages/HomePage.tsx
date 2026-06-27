@@ -80,13 +80,14 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
 
   const isSearching = urlSearchQuery && urlSearchQuery.trim() !== "";
 
-  return (<div className="min-h-screen text-movie-text-main font-body relative">
-  {/* Glowing orbs */}
-  <div className="absolute top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(20,178,214,0.3) 0%, transparent 70%)'}} />
-  <div className="absolute bottom-[40%] left-[-300px] w-[500px] h-[500px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(100,50,214,0.4) 0%, transparent 70%)'}} />
-  <div className="absolute bottom-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(20,178,214,0.25) 0%, transparent 70%)'}} />
-  <div className="absolute top-[40%] right-[-300px] w-[500px] h-[500px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(100,50,214,0.4) 0%, transparent 70%)'}} />
-  <main className="w-full px-16 py-14 relative z-10">
+  return (
+    <div className="min-h-screen text-movie-text-main font-body relative">    
+    {/* Glowing orbs */}
+      <div className="absolute top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(20,178,214,0.3) 0%, transparent 70%)'}} />
+      <div className="absolute bottom-[40%] left-[-300px] w-[500px] h-[500px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(100,50,214,0.4) 0%, transparent 70%)'}} />
+      <div className="absolute bottom-[-200px] right-[-200px] w-[700px] h-[700px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(20,178,214,0.25) 0%, transparent 70%)'}} />
+      <div className="absolute top-[40%] right-[-300px] w-[500px] h-[500px] rounded-full pointer-events-none z-0" style={{background: 'radial-gradient(circle, rgba(100,50,214,0.4) 0%, transparent 70%)'}} />
+      <main className="w-full px-16 py-14 relative z-10">
 
       {isSearching ? (
         <div className="space-y-6">
@@ -173,5 +174,3 @@ function HomePage({searchQuery} : {searchQuery?: string}) {
 }
 
 export default HomePage;
-
-

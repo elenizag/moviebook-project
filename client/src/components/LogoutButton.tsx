@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { logout } from "../services/authService";
+import { FaSignOutAlt } from "react-icons/fa";
 
 interface LogoutProp {
   onLogoutSuccess: () => void;
@@ -28,7 +29,8 @@ function LogoutButton({onLogoutSuccess, className}: LogoutProp) {
       onClick={handleLogout} 
       className={className || "text-lg font-medium text-red-500 hover:text-red-400 transition-colors cursor-pointer mr-5 focus:outline-none"}
     >
-      Logout
+      <FaSignOutAlt />
+      <span>Logout</span>
     </button>
   );
 }
