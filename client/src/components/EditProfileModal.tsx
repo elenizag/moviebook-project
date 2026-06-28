@@ -1,5 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+
 
 interface UserProfile {
   name: string;
@@ -7,16 +9,19 @@ interface UserProfile {
   email: string;
 }
 
-function EditProfileModal({ isOpen, onClose, user, onSave }: { isOpen: boolean; onClose: () => void; user: UserProfile | null; onSave: (updatedUser: UserProfile) => void }) {
+function EditProfileModal({ isOpen, onClose, user, onSave }: { isOpen: boolean; onClose: () => void; user: UserProfile | null; onSave: (updatedUser: UserProfile, password?: string) => void }) {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user && isOpen) {
       setName(user.name);
       setUsername(user.username);
       setEmail(user.email);
+      setPassword("");
     }
   }, [user, isOpen]);
 
@@ -26,7 +31,7 @@ function EditProfileModal({ isOpen, onClose, user, onSave }: { isOpen: boolean; 
       name,
       username,
       email,
-    });
+    }, password || undefined);
   };
 
   if (!isOpen) return null;
@@ -58,9 +63,23 @@ function EditProfileModal({ isOpen, onClose, user, onSave }: { isOpen: boolean; 
               value={email}
               onChange={(e) => setEmail(e.target.value) }
               className="w-full px-3 py-2 bg-movie-bg border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-movie-accent text-movie-text-main mb-2"
-            />            
+            />    
+            <div className="relative">
+              <label className="block text-sm font-medium text-movie-text-sec mb-1 mt-3">Change Password:</label>
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-3 py-2 bg-movie-bg border border-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-movie-accent text-movie-text-main pr-10"              />
+              <span
+                className="absolute right-[12px] bottom-[12px] cursor-pointer text-movie-text-sec"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEye /> : <FaEyeSlash />}
+              </span>
+            </div>    
           </div>  
-          
+           
           <div className="flex justify-end gap-3 pt-4 mt-6">
             <button
               type="button"

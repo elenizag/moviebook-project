@@ -1,5 +1,5 @@
 import { FaUserCircle } from "react-icons/fa";
-import { user as getprofile, updateProfile } from "../services/authService";
+import { user as getprofile, updateProfile, updatePassword } from "../services/authService";
 import { useEffect, useState } from "react";
 import EditProfileModal from "../components/EditProfileModal";
 
@@ -51,7 +51,7 @@ function ProfilePage() {
     return <p className="text-center mt-10 text-red-500">{error}</p>;
   }
 
-  const handleSaveChanges = async (updatedUser: UserProfile) => {
+  const handleSaveChanges = async (updatedUser: UserProfile, password?: string) => {
     try {
       const userId = (user as any)?.id || (user as any)?._id;
       if (!userId) {
@@ -60,6 +60,10 @@ function ProfilePage() {
       }
 
       const savedUserFromServer = await updateProfile(userId, updatedUser);
+
+      if (password) {
+        await updatePassword(userId, { password });
+      }
 
       setUser(savedUserFromServer);
       const savedString = localStorage.getItem("currentUser");

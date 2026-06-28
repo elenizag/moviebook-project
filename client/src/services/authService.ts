@@ -74,7 +74,7 @@ export const user = async () => {
 
 export const updateProfile = async (userId: any, updatedData: {name: string; username: string; email: string}) => {
   try {
-    const response = await fetch(`http://localhost:8000/api/user`, {
+    const response = await fetch(`http://localhost:8000/api/user/${userId}/information`, {
       method: "PATCH",
       credentials: "include",
       headers: {
@@ -93,6 +93,27 @@ export const updateProfile = async (userId: any, updatedData: {name: string; use
     return data;
   } catch (error) {
     console.log(error);
+    throw error;
+  }
+};
+
+export const updatePassword = async (userId: any, passwordData: { password: string }) => {
+  try {
+    const response = await fetch(`http://localhost:8000/api/user/${userId}/password`, {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      },
+      body: JSON.stringify(passwordData),
+    });
+
+    const data = await response.json();
+    if (!response.ok) throw new Error(data?.message || "Failed to update password");
+    return data;
+  } catch (error) {
+    console.error(error);
     throw error;
   }
 };
